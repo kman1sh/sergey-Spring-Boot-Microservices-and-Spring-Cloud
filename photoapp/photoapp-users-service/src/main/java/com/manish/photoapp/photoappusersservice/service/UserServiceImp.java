@@ -5,11 +5,14 @@ import com.manish.photoapp.photoappusersservice.repository.UsersRepository;
 import com.manish.photoapp.photoappusersservice.shared.UserDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.modelmapper.spi.MatchingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Service
@@ -43,5 +46,26 @@ public class UserServiceImp implements UserService {
         UserDto returnValue = modelMapper.map(userEntity, UserDto.class);
 
         return returnValue;
+    }
+
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserEntity userEntity = usersRepository.findByEmail(username);
+        if(userEntity == null) throw new UsernameNotFoundException(username);
+
+        //since repo give userEntity type obj but we need to return UserDetails object.
+        //there is a class User() that implements UserDetails so we will wrap userEntity inside User() object and return it.
+        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(),
+                true, true, true, true, new ArrayList<>());
+    }
+
+
+    @Override
+    public UserDto getUserDetailsByEmail(String username) {
+        UserEntity userEntity = usersRepository.findByEmail(username);
+        if(userEntity == null) throw new UsernameNotFoundException(username);
+
+        return new ModelMapper().map(userEntity, UserDto.class);
     }
 }

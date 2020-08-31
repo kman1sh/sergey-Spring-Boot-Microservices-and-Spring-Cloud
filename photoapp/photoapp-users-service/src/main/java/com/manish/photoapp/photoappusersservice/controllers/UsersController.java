@@ -1,7 +1,6 @@
 package com.manish.photoapp.photoappusersservice.controllers;
 
 import com.manish.photoapp.photoappusersservice.model.CreateUserModel;
-import com.manish.photoapp.photoappusersservice.model.UserEntity;
 import com.manish.photoapp.photoappusersservice.model.UserResponseModel;
 import com.manish.photoapp.photoappusersservice.service.UserService;
 import com.manish.photoapp.photoappusersservice.shared.UserDto;
@@ -12,7 +11,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
